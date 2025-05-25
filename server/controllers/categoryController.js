@@ -16,3 +16,24 @@ exports.deleteCategory = async (req, res) => {
   await categoryModel.deleteCategory(id);
   res.json({ message: 'Categoria eliminata' });
 };
+
+exports.getCategoryById = async (req, res) => {
+  const { id } = req.params;
+  const [rows] = await categoryModel.getCategoryById(id);
+  if (rows.length === 0) {
+    return res.status(404).json({ message: 'Categoria non trovata' });
+  }
+  res.json(rows[0]);
+}
+
+exports.updateCategory = async (req, res) => {
+  const { id } = req.params;
+  const { name } = req.body;
+  const [existingCategory] = await categoryModel.getCategoryById(id);
+  if (existingCategory.length === 0) {
+    return res.status(404).json({ message: 'Categoria non trovata' });
+  }
+
+  await categoryModel.updateCategory(id, name);
+  res.json({ message: 'Categoria aggiornata' });
+}

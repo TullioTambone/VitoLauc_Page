@@ -11,3 +11,11 @@ exports.createCategory = (name) => {
 exports.deleteCategory = (id) => {
   return db.execute('DELETE FROM categories WHERE id = ?', [id]);
 };
+
+exports.getCategoryById = (id) => {
+  return db.execute('SELECT * FROM categories WHERE id = ?', [id]);
+}
+
+exports.updateCategory = (id, name) => {
+  return db.execute('UPDATE categories SET name = ? WHERE id = ?', [name, id]);
+};

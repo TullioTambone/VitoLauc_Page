@@ -5,6 +5,10 @@ sql
 dbCreation.sql
 init-db.js
 test-env.js
+s3.js
+
+package.json
+package-lock.json
 
 # Node modules (dipendenze)
 node_modules/

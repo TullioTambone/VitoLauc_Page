@@ -17,9 +17,11 @@ app.use('/uploads', express.static('uploads'));
 const postRoutes = require('./routes/posts');
 const categoryRoutes = require('./routes/categories');
 const auth = require('./routes/auth');
+const trashRoutes = require('./routes/trash');
 
 app.use('/api/posts', postRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/auth', auth);
+app.use('/api/trash', trashRoutes);
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
