@@ -3,17 +3,13 @@ const router = express.Router();
 const {
   getCategories,
   getCategoryById,
-  // updateCategory,
   createCategory,
   deleteCategory
+  // updateCategory
 } = require('../controllers/categoryController');
 
-const authenticate = require('../middleware/authenticate');
-
-router.use(authenticate);
-
-router.post('/', createCategory);
 router.get('/', getCategories);
+router.post('/', createCategory);
 router.delete('/:id', deleteCategory);
 router.get('/:id', getCategoryById);
 // router.put('/:id', updateCategory);
