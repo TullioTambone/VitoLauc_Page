@@ -9,6 +9,7 @@ Route::get('/categories/{id}', [CategoryController::class, 'show']);
 Route::get('/photos', [PhotoController::class, 'index']);
 Route::get('/photos/category/{id}', [PhotoController::class, 'byCategory']);
 
+
 // Admin (protette)
 Route::middleware('auth:sanctum')->group(function () {
     // Categories
