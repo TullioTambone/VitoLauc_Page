@@ -1,0 +1,28 @@
+# Ignora file delle variabili d'ambiente
+.env
+
+sql
+dbCreation.sql
+init-db.js
+test-env.js
+s3.js
+
+package.json
+package-lock.json
+
+# Node modules (dipendenze)
+node_modules/
+
+# Log files
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Directory di build/output (esempio)
+dist/
+build/
+
+# File di sistema
+.DS_Store
+Thumbs.db
