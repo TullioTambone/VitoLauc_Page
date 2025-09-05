@@ -5,6 +5,9 @@ import home from '../views/home.vue';
 import works from '../views/works.vue';
 import contact from '../views/contact.vue';
 import login from '../views/LoginAdmin.vue';
+import adminDashboard from '../views/AdminDashboard.vue';
+
+import { isAdminLoggedIn } from '../services/auth.js';
 
 const routes = [
   {
@@ -14,10 +17,10 @@ const routes = [
     meta: { transition: 'fade'}
   },
   {
-    path: '/upload',
-    name: 'upload',
-    component: () => import('../views/UploadAdmin.vue'),
-    meta: { transition: 'fade', requiresAuth: true }
+    path: '/dashboard',
+    name: 'dashboard',
+    component: adminDashboard,
+    meta: { requiresAuth: true }
   },
   {
     path: '/',
@@ -50,12 +53,6 @@ const routes = [
     component: () => import('../views/singleWork.vue'),
     meta: { transition: 'fade' }
   },
-  // {
-  //   path: '/login',
-  //   name: 'login',
-  //   component: () => import('../views/login.vue'),
-  //   meta: { transition: 'fade' }
-  // },
   {
     path: '/unauthorized',
     name: 'unauthorized',
@@ -78,10 +75,3 @@ router.beforeEach((to, from, next) => {
 });
 
 export default router;
-
-
-function isAdminLoggedIn() {
-  // controlla se c'è un token admin salvato in localStorage
-  const token = localStorage.getItem('admin_token');
-  return !!token; // true se esiste, false altrimenti
-}

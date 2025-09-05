@@ -35,7 +35,7 @@ export default {
 
         console.log(`Login OK: ${user.email}`);
         // Redirect alla dashboard admin
-        this.$router.push({ name: 'upload' });
+        this.$router.push({ name: 'dashboard' });
 
       } catch (err) {
         console.error('Errore login:', err);

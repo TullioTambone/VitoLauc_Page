@@ -1,11 +1,20 @@
 <script>
 import 'animate.css';
+import { isAdminLoggedIn } from '../services/auth.js';
 
 export default{
     name:'navbarComp',
     props: ['mario'],
     data(){
         return{}
+    },
+    computed: {
+        isAdminRoute() {
+            return this.$route.path.includes('dashboard');
+        },
+        adminLoggedIn() {
+            return isAdminLoggedIn();
+        }
     },
     mounted(){
         this.nav = document.querySelector('#nav');
@@ -18,6 +27,13 @@ export default{
     watch:{
         mario(value){
             this.showUnShow(value)
+        },
+        $route(to, from) {
+            // Esempio: stampa la route attuale
+            console.log('Route cambiata da', from.path, 'a', to.path);
+
+            // Oppure aggiorna manualmente qualche stato se necessario
+            // this.someData = ...;
         }
     },
     methods:{
@@ -46,9 +62,12 @@ export default{
 </script>
 
 <template>
-<aside id="bar" class="animate__animated animate__fadeInRight">
+<aside id="bar" class="animate__animated animate__fadeInRight" v-if="!isAdminRoute">
     <div>
         <ul>
+            <li v-if="adminLoggedIn">
+                <RouterLink to="/dashboard">Dashboard</RouterLink>
+            </li>
             <li>
                 <RouterLink to="/home" @click="changeBackroundNormal()">Home</RouterLink>
             </li>
@@ -62,7 +81,7 @@ export default{
     </div>
 </aside>
 
-<nav id="nav" class="animate__animated animate__fadeInUp" @mario="showUnShow">
+<nav id="nav" class="animate__animated animate__fadeInUp" @mario="showUnShow" v-if="!isAdminRoute">
     <div>
         <ul>
             <li>
