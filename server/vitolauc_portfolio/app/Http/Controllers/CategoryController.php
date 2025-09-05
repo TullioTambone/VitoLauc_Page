@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class CategoryController extends Controller
 {
@@ -11,10 +12,12 @@ class CategoryController extends Controller
     public function index(Request $request)
     {
         if ($request->query('show_on_home')) {
-            return Category::where('show_on_home', true)->get();
+            return Category::where('show_on_home', true)
+                    ->with('macroCategory')
+                    ->get();
         }
 
-        return Category::all();
+        return Category::with('macroCategory')->get();
     }
 
     // Mostra una categoria singola
@@ -23,36 +26,45 @@ class CategoryController extends Controller
         return Category::findOrFail($id);
     }
 
-    // Crea nuova categoria
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string|unique:categories,name',
+        $data = $request->validate([
+            'name' => 'required|string|max:255',
+            'macro_category_id' => 'nullable|exists:macro_categories,id',
             'show_on_home' => 'boolean',
+            'photo' => 'nullable|image|max:20480', // fino a 20MB
         ]);
 
-        $category = Category::create([
-            'name' => $request->name,
-            'show_on_home' => $request->show_on_home ?? false,
-        ]);
+        if ($request->hasFile('photo')) {
+            $data['photo'] = $request->file('photo')->store('categories', 'public');
+        }
+
+        $category = Category::create($data);
+        $category->load('macroCategory');
 
         return response()->json($category, 201);
     }
 
-    // Aggiorna categoria
     public function update(Request $request, $id)
     {
         $category = Category::findOrFail($id);
 
-        $request->validate([
-            'name' => 'required|string|unique:categories,name,' . $id,
+        $data = $request->validate([
+            'name' => 'required|string|max:255',
+            'macro_category_id' => 'nullable|exists:macro_categories,id',
             'show_on_home' => 'boolean',
+            'photo' => 'nullable|image|max:20480',
         ]);
 
-        $category->update([
-            'name' => $request->name,
-            'show_on_home' => $request->show_on_home ?? false,
-        ]);
+        if ($request->hasFile('photo')) {
+            if ($category->photo) {
+                Storage::disk('public')->delete($category->photo);
+            }
+            $data['photo'] = $request->file('photo')->store('categories', 'public');
+        }
+
+        $category->update($data);
+        $category->load('macroCategory');
 
         return response()->json($category);
     }
